@@ -11,16 +11,19 @@
     "server": "node server/index.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "emailjs-com": "^3.2.0",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.0.1",
-    "express": "^4.18.2",
-    "nodemailer": "^6.9.9",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.1"
+    "vite-react-starter": "file:"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@tailwindcss/forms": "^0.5.9",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

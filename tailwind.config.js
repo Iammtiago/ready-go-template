@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindForm from '@tailwindcss/forms'
 export default {
   content: [
     "./index.html",
@@ -11,7 +12,10 @@ export default {
         secondary: "#1E293B",
         accent: "#3B82F6",
       }
-    },
+    }
   },
-  plugins: [],
+  plugins: [
+    // require('@tailwindcss/forms')
+    tailwindForm
+  ]
 }
