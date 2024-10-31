@@ -1,27 +1,7 @@
-import { useState, useRef } from 'react';
-// import { createTransport } from 'nodemailer';
-import emailjs from 'emailjs-com';
-emailjs.init({
-    publicKey: 'JTKyDK0bpI8gOckcw',
-    privateKey: 'hocifTRbEm0AsqtQeIElA',
-    // Do not allow headless browsers
-    blockHeadless: true,
-    blockList: {
-        // Block the suspended emails
-        list: ['foo@emailjs.com', 'bar@emailjs.com'],
-        // The variable contains the email address
-        watchVariable: 'user_email',
-    },
-    limitRate: {
-        // Set the limit rate for the application
-        id: 'app',
-        // Allow 1 request per 10s
-        throttle: 10000,
-    },
-});
+import { useState } from 'react';
+import Swal from 'sweetalert2'
 
 // var email_user = "anonymusss279@gmail.com";
-
 // const transporter = createTransport({
 //     host: "smtp.gmail.com",
 //     port: 465,
@@ -34,48 +14,54 @@ emailjs.init({
 
 const ContactSection = () => {
     const [formData, setFormData] = useState({
-        user_name: '',
-        user_email: '',
-        user_message: ''
+        name: '',
+        email: '',
+        message: ''
     });
 
-    const form = useRef(null);
 
     const [status, setStatus] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus('sending');
- 
+        
         try {
-            console.log(form.current);
-            // emailjs.sendForm('service_v5gu8yl', 'template_b4naoow', form.current, {
-                // {
-                //     publicKey: 'hqA9uw2QtSbIML0Jn', 
-                //     privateKey: '4L9yIOT3AO2czbWCkYuKo'
+    
+            const formData = new FormData(e.target);
+    
+            // formData.append("access_key", "8a0f3d19-465e-49fc-9602-e7ebf7cc5f8b"); // tiagoddd279@gmail.com
+            formData.append("access_key", "bc0a7ce1-dda1-4ba3-bf6c-dfc54bf611ba"); //santiagoAndres79@outlook.es
 
-                // })
-            emailjs.send('service_v5gu8yl', 'template_b4naoow', formData)
-                .then(
-                    (res) => {
-                        console.log('SUCCESS!', res.status, res.text);
-                        setStatus('success');
-                        setFormData({ user_name: '', user_email: '', user_message: '' });
-                    },
-                    (error) => {
-                        console.log('FAILED...', error.text);
-                        setStatus('error');
-                    },
-                );
-
-
-            // const response = await fetch('http://localhost:3000/send-email', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(formData),
-            // });
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            });
+    
+            const data = await response.json();
+    
+            if (data.success) {
+                setStatus('success');
+                setFormData({ name: '', email: '', message: '' });
+                e.target.reset();
+                Swal.fire({
+                    title: "Correo enviado!",
+                    text: "¡Mensaje enviado con éxito!",
+                    showCloseButton: true,
+                    icon: "success"
+                });
+            } else {
+                console.log("Error", data);
+                console.log("Error.message", data.message);
+                setStatus('error');
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showCloseButton: true,
+                    text: "Error al enviar el mensaje. Por favor, intenta nuevamente."
+                    // footer: '<a href="#">Why do I have this issue?</a>'
+                });
+            }
 
     //         const mailOptions = {
     //             from: email_user,
@@ -106,21 +92,21 @@ const ContactSection = () => {
     // `
     //         };
 
-            // let info = await transporter.sendMail(mailOptions);
 
-            // console.log("Email sent: ", info.response);
-            // console.log("mensagge sent: ", info.messageId);
-
-            // if (info?.messageId) {
-            //     setStatus('success');
-            //     setFormData({ name: '', email: '', message: '' });
-            // } else {
-            //     setStatus('error');
-            // }
         } catch (err) {
             console.error(err);
             setStatus('error');
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showCloseButton: true,
+                text: "Error al enviar el mensaje. Por favor, intenta nuevamente."
+                // footer: '<a href="#">Why do I have this issue?</a>'
+            });
         }
+
+        
+        setTimeout(() => setStatus(''), 4000)
     };
 
     const handleChange = (e) => {
@@ -135,37 +121,40 @@ const ContactSection = () => {
             <div className="max-w-4xl mx-auto px-4">
                 <h2 className="text-4xl font-bold text-center mb-16">Contáctenos</h2>
                 <div className="bg-primary p-8 rounded-xl">
-                    <form onSubmit={handleSubmit} className="space-y-6 text-center" ref={form}>
-                        <div>
+                    <form onSubmit={handleSubmit} className="space-y-6 text-center">
+                        <div className='text-left'>
+                            <label className="pl-3 text-lg text-pretty font-semibold">Nombre completo</label>
                             <input
                                 type="text"
-                                name="user_name"
+                                name="name"
                                 placeholder="Nombre"
-                                value={formData.user_name}
+                                value={formData.name}
                                 onChange={handleChange}
-                                className="form-input w-full p-3 rounded-lg bg-secondary border border-gray-700 focus:border-accent focus:outline-none"
+                                className="form-input w-full p-3 mt-2 rounded-lg bg-secondary border border-gray-700 focus:border-accent focus:outline-none"
                                 required
                             />
                         </div>
-                        <div>
+                        <div className='text-left'>
+                            <label className="pl-3 text-lg text-pretty font-semibold">Email</label>
                             <input
                                 type="email"
-                                name="user_email"
+                                name="email"
                                 placeholder="Email"
-                                value={formData.user_email}
+                                value={formData.email}
                                 onChange={handleChange}
-                                className="form-input w-full p-3 rounded-lg bg-secondary border border-gray-700 focus:border-accent focus:outline-none"
+                                className="form-input w-full p-3 mt-2 rounded-lg bg-secondary border border-gray-700 focus:border-accent focus:outline-none"
                                 required
                             />
                         </div>
-                        <div>
+                        <div className='text-left'>
+                            <label className="pl-3 text-lg text-pretty font-semibold">Mensaje</label>
                             <textarea
-                                name="user_message"
+                                name="message"
                                 placeholder="Mensaje"
-                                value={formData.user_message}
+                                value={formData.message}
                                 onChange={handleChange}
                                 rows="3"
-                                className="form-textarea w-full p-3 rounded-lg bg-secondary border border-gray-700 focus:border-accent focus:outline-none"
+                                className="form-textarea w-full p-3 mt-2 rounded-lg bg-secondary border border-gray-700 focus:border-accent focus:outline-none resize-none min-h-[120px] max-h-[150px]"
                                 required
                             ></textarea>
                         </div>
