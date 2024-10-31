@@ -7,7 +7,7 @@ const ProcessSection = () => {
         <section className="py-20 bg-primary" id="proceso">
             <div className="max-w-6xl mx-auto px-4">
                 <h2 className="text-4xl font-bold text-center mb-16">Nuestro Proceso</h2>
-                <div className="grid md:grid-cols-5 gap-8">
+                <div className="grid md:grid-cols-5 gap-9">
                     <div className="text-center">
                         <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
                             <FaLightbulb className="text-2xl" />

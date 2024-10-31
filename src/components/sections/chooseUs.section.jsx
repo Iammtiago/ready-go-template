@@ -35,7 +35,7 @@ const ChooseUsSection = () => {
                 <h2 className="text-4xl font-bold text-center mb-16">¿Por qué Elegirnos?</h2>
                 <div className="grid md:grid-cols-5 gap-8">
                     {itemsList.map((item, index) => (
-                        <div key={index} className="flex flex-col items-center text-center p-6 bg-primary rounded-lg hover:transform hover:-translate-y-2 transition duration-300">
+                        <div key={index} className="flex flex-col items-center text-center p-6 mb-5 bg-primary rounded-xl border-2 border-slate-600/70 hover:border-accent/80 shadow-md hover:shadow-lg hover:transform hover:-translate-y-2 transition duration-300">
                             {item.icon}
                             <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
                             <p className="mt-2 text-gray-400">{item.text}</p>
